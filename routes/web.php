@@ -1,7 +1,27 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Home\HomeController;
+use App\Http\Controllers\Profile\ProfileController;
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/', [AuthController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [AuthController::class, 'login'])->name('auth');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/home', [HomeController::class, 'showHome'])->name('home');
+
+    Route::middleware('profile.owner')->group(function () {
+        Route::get('/profile/{uuid}', [ProfileController::class, 'showProfile'])->name('profile');
+    });
+
+    Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+});
+
+Route::get('/acesso-negado', function () {
+    return view('blade.pages.auth.unauthorized');
+})->name('unauthorized');
+
+Route::fallback(function () {
+    return response()->view('blade.pages.notFound.notFound', [], 404);
 });
