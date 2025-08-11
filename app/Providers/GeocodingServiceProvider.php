@@ -21,7 +21,6 @@ class GeocodingServiceProvider extends ServiceProvider {
             config('services.mapbox.access_token')
         ));
 
-
         $this->app->singleton(GeocodingService::class, function ($app) {
             return new GeocodingService([
                 $app->make('geocoding.google'),

@@ -24,7 +24,7 @@ class TestGeocodingProviders extends Command {
      * @return void
      */
     public function handle(GeocodingService $geocoding): void {
-        $provider = $this->option('provider');
+        $provider = ucfirst($this->option('provider'));
 
         $address = Address::find(1);
 

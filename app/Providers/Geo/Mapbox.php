@@ -9,6 +9,10 @@ use App\Contracts\Providers\Geo\GeocodingProvider;
 
 class Mapbox implements GeocodingProvider {
 
+    private const string NAME = 'Mapbox';
+
+    private const string BASE_URL = 'https://nominatim.openstreetmap.org/search';
+
     /**
      * @var string
      */
@@ -19,12 +23,19 @@ class Mapbox implements GeocodingProvider {
     }
 
     /**
+     * @return string
+     */
+    public function getName(): string {
+        return self::NAME;
+    }
+
+    /**
      * @param Address $address
      * @return array|null
      */
     public function geocode(Address $address): ?array {
         try {
-            $url = 'https://api.mapbox.com/search/geocode/v6/forward?' . http_build_query([
+            $url = self::BASE_URL . http_build_query([
                 'country' => $address->country,
                 'address_number' => $address->number,
                 'street' => urlencode($address->street),
@@ -41,7 +52,7 @@ class Mapbox implements GeocodingProvider {
                 return [
                     'latitude' => $data['features'][0]['geometry']['coordinates'][1],
                     'longitude' => $data['features'][0]['geometry']['coordinates'][0],
-                    'provider' => 'mapbox',
+                    'provider' => self::NAME,
                 ];
             }
 
@@ -49,12 +60,5 @@ class Mapbox implements GeocodingProvider {
         } catch (ConnectionException $e) {
             return null;
         }
-    }
-
-    /**
-     * @return string
-     */
-    public function getName(): string {
-        return 'Mapbox';
     }
 }

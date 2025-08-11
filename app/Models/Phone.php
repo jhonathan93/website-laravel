@@ -2,13 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Support\Carbon;
 use Database\Factories\PhoneFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Casts\Attribute;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Carbon;
 
 /**
  * App\Models\Phone
@@ -40,10 +40,10 @@ use Illuminate\Support\Carbon;
 class Phone extends Model {
     use HasFactory;
 
-    public const TYPE_MOBILE = 1;
-    public const TYPE_HOME = 2;
-    public const TYPE_WORK = 3;
-    public const TYPE_OTHER = 4;
+    public const int TYPE_MOBILE = 1;
+    public const int TYPE_HOME = 2;
+    public const int TYPE_WORK = 3;
+    public const int TYPE_OTHER = 4;
 
     /**
      * The attributes that are mass assignable.
