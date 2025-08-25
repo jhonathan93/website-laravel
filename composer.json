@@ -12,7 +12,8 @@
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.10.1",
         "league/flysystem-aws-s3-v3": "^3.29",
-        "livewire/livewire": "^3.6.4"
+        "livewire/livewire": "^3.6.4",
+        "ext-imagick": "*"
     },
     "require-dev": {
         "fakerphp/faker": "^1.24",

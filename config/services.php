@@ -44,4 +44,8 @@ return [
     'geocoding' => [
         'default' => env('GEOCODING_DEFAULT_PROVIDER', 'google'),
     ],
+
+    'cep' => [
+        'default' => env('CEP_DEFAULT_PROVIDER', 'viacep'),
+    ],
 ];

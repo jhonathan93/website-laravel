@@ -15,9 +15,7 @@ class CheckProfileOwner {
      */
     public function handle(Request $request, Closure $next): Response {
 
-        if (auth()->user()->uuid !== $request->route('uuid')) {
-            return $request->expectsJson() ? response()->json(['message' => 'Unauthorized'], 401) : redirect()->guest(route('unauthorized'));
-        }
+        if (auth()->user()->uuid !== $request->route('uuid')) return $request->expectsJson() ? response()->json(['message' => 'Unauthorized'], 401) : redirect()->guest(route('unauthorized'));
 
         return $next($request);
     }

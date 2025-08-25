@@ -2,9 +2,9 @@
 
 namespace App\Services\Image;
 
-use Illuminate\Support\Facades\Crypt;
 use Imagick;
 use ImagickException;
+use Illuminate\Support\Facades\Crypt;
 
 class ImageService {
 
