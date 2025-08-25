@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Providers\Geo;
+namespace App\Services\Geo;
 
 use App\Models\Address;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Client\ConnectionException;
-use App\Contracts\Providers\Geo\GeocodingProvider;
+use App\Contracts\Providers\Geo\GeocodingServiceInterface;
 
-class Mapbox implements GeocodingProvider {
+class MapboxService implements GeocodingServiceInterface {
 
     private const string NAME = 'Mapbox';
 

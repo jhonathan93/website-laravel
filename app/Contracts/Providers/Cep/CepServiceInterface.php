@@ -2,7 +2,7 @@
 
 namespace App\Contracts\Providers\Cep;
 
-interface CepProvider {
+interface CepServiceInterface {
 
     /**
      * @return string

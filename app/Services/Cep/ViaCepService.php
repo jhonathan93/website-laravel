@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Providers\Cep;
+namespace App\Services\Cep;
 
 use Exception;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
-use App\Contracts\Providers\Cep\CepProvider;
+use App\Contracts\Providers\Cep\CepServiceInterface;
 
-class ViaCep implements CepProvider {
+class ViaCepService implements CepServiceInterface {
 
     private const string NAME = 'Viacep';
     private const string BASE_URL = 'https://viacep.com.br/ws/{cep}/json/';
@@ -35,8 +35,6 @@ class ViaCep implements CepProvider {
      */
     public function cep(string $cep): ?array {
         try {
-            $start = microtime(true);
-
             $cleanCep = preg_replace('/[^0-9]/', '', $cep);
 
             if (strlen($cleanCep) !== 8) {
@@ -65,9 +63,6 @@ class ViaCep implements CepProvider {
                 return null;
             }
 
-            $end = microtime(true);
-            logger()->info("Tempo da API: " . round(($end - $start), 3) . "s");
-
             return [
                 'zip_code' => $data['cep'] ?? null,
                 'street' => $data['logradouro'] ?? null,
@@ -76,7 +71,7 @@ class ViaCep implements CepProvider {
                 'state' => $data['uf'] ?? null,
                 'provider' => self::NAME
             ];
-        } catch (Exception $e) {
+        } catch (Exception) {
             return null;
         }
     }

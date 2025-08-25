@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Providers\Geo;
+namespace App\Services\Geo;
 
 use App\Models\Address;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Client\ConnectionException;
-use App\Contracts\Providers\Geo\GeocodingProvider;
+use App\Contracts\Providers\Geo\GeocodingServiceInterface;
 
-class Google implements GeocodingProvider {
+class GoogleService implements GeocodingServiceInterface {
 
     private const string NAME = 'Google';
 

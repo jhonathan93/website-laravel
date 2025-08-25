@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Services\Cep;
+namespace App\Providers\Cep;
 
 use Exception;
 use RuntimeException;
 use InvalidArgumentException;
 use Illuminate\Support\Collection;
-use App\Contracts\Providers\Cep\CepProvider;
+use App\Contracts\Providers\Cep\CepServiceInterface;
 
-class CepService {
+class CepManager {
 
     /**
-     * @var Collection<CepProvider>
+     * @var Collection<CepServiceInterface>
      */
     private Collection $providers;
 
@@ -37,9 +37,9 @@ class CepService {
     public function cep(string $codeCep, ?string $provider = null): ?array {
         $provider = $provider ?? $this->defaultProvider;
 
-        /** @var CepProvider $CepProvider */
+        /** @var CepServiceInterface $CepProvider */
         $CepProvider = $this->providers->first(
-            fn(CepProvider $p) => $p->getName() === $provider
+            fn(CepServiceInterface $p) => $p->getName() === $provider
         );
 
         if (!$CepProvider) throw new InvalidArgumentException("Provedor de endereço '$provider' não encontrado");

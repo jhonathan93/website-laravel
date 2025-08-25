@@ -5,70 +5,27 @@
     </h2>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div>
-            <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Nome Completo *</label>
-            <input
-                type="text"
-                id="name"
-                name="name"
-                required
-                class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                placeholder="Seu nome completo">
-        </div>
+        @foreach($fieldConfig as $field => $config)
+            <div class="{{ $config['colspan'] ?? '' }} {{ $config['wrapper_class'] ?? '' }}">
+                <label for="{{ $field }}" class="block text-sm font-medium text-gray-700 mb-1">
+                    {{ $config['label'] }}
+                    @if($config['required'] ?? false) * @endif
+                </label>
 
-        <div>
-            <label for="email" class="block text-sm font-medium text-gray-700 mb-1">E-mail *</label>
-            <input
-                type="email"
-                id="email"
-                name="email"
-                required
-                class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                placeholder="seu@email.com">
-        </div>
+                {!! $config['before_input'] ?? '' !!}
 
-        <div>
-            <label for="cpf" class="block text-sm font-medium text-gray-700 mb-1">CPF *</label>
-            <input
-                type="text"
-                id="cpf"
-                name="cpf"
-                required
-                class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                placeholder="000.000.000-00">
-        </div>
+                @if($config['type'] === 'select')
+                    <select class="{{ $config['class'] }}" id="{{ $field }}" wire:model="formData.{{ $field }}" @if($config['required'] ?? false) required @endif >
+                        @foreach($config['options'] as $value => $label)
+                            <option value="{{ $value }}">{{ $label }}</option>
+                        @endforeach
+                    </select>
+                @else
+                    <input type="{{ $config['type'] }}" class="{{ $config['class'] }}" id="{{ $field }}" wire:model="formData.{{ $field }}" placeholder="{{ $config['placeholder'] ?? '' }}" @if($config['required'] ?? false) required @endif>
+                @endif
 
-        <div>
-            <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">Telefone *</label>
-            <input
-                type="tel"
-                id="phone"
-                name="phone"
-                required
-                class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                placeholder="(00) 00000-0000">
-        </div>
-
-        <div>
-            <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Senha *</label>
-            <input
-                type="password"
-                id="password"
-                name="password"
-                required
-                class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                placeholder="Mínimo de 8 caracteres">
-        </div>
-
-        <div>
-            <label for="password_confirmation" class="block text-sm font-medium text-gray-700 mb-1">Confirmar Senha *</label>
-            <input
-                type="password"
-                id="password_confirmation"
-                name="password_confirmation"
-                required
-                class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                placeholder="Digite novamente sua senha">
-        </div>
+                {!! $config['after_input'] ?? '' !!}
+            </div>
+        @endforeach
     </div>
 </div>

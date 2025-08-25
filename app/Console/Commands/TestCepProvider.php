@@ -5,9 +5,10 @@ namespace App\Console\Commands;
 use Exception;
 use App\Models\Address;
 use Illuminate\Console\Command;
-use App\Services\Cep\CepService;
+use App\Providers\Cep\CepManager;
 
 class TestCepProvider extends Command {
+
     /**
      * @var string
      */
@@ -18,7 +19,11 @@ class TestCepProvider extends Command {
      */
     protected $description = '';
 
-    public function handle(CepService $cepService): void {
+    /**
+     * @param CepManager $cepManager
+     * @return void
+     */
+    public function handle(CepManager $cepManager): void {
         $provider = ucfirst($this->option('provider'));
 
         /** @var Address $address */
@@ -27,7 +32,7 @@ class TestCepProvider extends Command {
         $this->info("Testando: $address->zip_code");
 
         if ($provider) {
-            $result = $cepService->cep($address->zip_code, $provider);
+            $result = $cepManager->cep($address->zip_code, $provider);
 
             if ($result) {
                 $this->showResult($result);
@@ -36,7 +41,7 @@ class TestCepProvider extends Command {
             }
         } else {
             try {
-                $this->showResult($cepService->cepWithFallback($address->zip_code));
+                $this->showResult($cepManager->cepWithFallback($address->zip_code));
             } catch (Exception $e) {
                 $this->error("Todos os provedores falharam {$e->getMessage()}");
             }

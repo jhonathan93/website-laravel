@@ -4,7 +4,7 @@ namespace App\Contracts\Providers\Geo;
 
 use App\Models\Address;
 
-interface GeocodingProvider {
+interface GeocodingServiceInterface {
 
     /**
      * @return string

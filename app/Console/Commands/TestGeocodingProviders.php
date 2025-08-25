@@ -5,7 +5,7 @@ namespace App\Console\Commands;
 use Exception;
 use App\Models\Address;
 use Illuminate\Console\Command;
-use App\Services\Geo\GeocodingService;
+use App\Providers\Geo\GeocodingManager;
 
 class TestGeocodingProviders extends Command {
 
@@ -20,10 +20,10 @@ class TestGeocodingProviders extends Command {
     protected $description = 'Testa o serviço de geocodificação com um endereço';
 
     /**
-     * @param GeocodingService $geocoding
+     * @param GeocodingManager $geocoding
      * @return void
      */
-    public function handle(GeocodingService $geocoding): void {
+    public function handle(GeocodingManager $geocoding): void {
         $provider = ucfirst($this->option('provider'));
 
         $address = Address::find(1);

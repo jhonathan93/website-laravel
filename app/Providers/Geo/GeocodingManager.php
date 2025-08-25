@@ -1,18 +1,18 @@
 <?php
 
-namespace App\Services\Geo;
+namespace App\Providers\Geo;
 
 use Exception;
 use RuntimeException;
 use App\Models\Address;
 use InvalidArgumentException;
 use Illuminate\Support\Collection;
-use App\Contracts\Providers\Geo\GeocodingProvider;
+use App\Contracts\Providers\Geo\GeocodingServiceInterface;
 
-class GeocodingService {
+class GeocodingManager {
 
     /**
-     * @var Collection<GeocodingProvider>
+     * @var Collection<GeocodingServiceInterface>
      */
     private Collection $providers;
 
@@ -38,9 +38,9 @@ class GeocodingService {
     public function geocode(Address $address, ?string $provider = null): ?array {
         $provider = $provider ?? $this->defaultProvider;
 
-        /** @var GeocodingProvider $geocoder */
+        /** @var GeocodingServiceInterface $geocoder */
         $geocoder = $this->providers->first(
-            fn(GeocodingProvider $p) => $p->getName() === $provider
+            fn(GeocodingServiceInterface $p) => $p->getName() === $provider
         );
 
         if (!$geocoder) throw new InvalidArgumentException("Provedor de geocodificação '$provider' não encontrado");
