@@ -3,6 +3,7 @@
 namespace App\Livewire\Components\Forms\Users;
 
 use Livewire\Component;
+use App\Rules\CpfValidator;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -115,7 +116,7 @@ class UsersForm extends Component {
      * @return void
      */
     public function validateCpfField(): void {
-        if (!app('validator.cpf')->validate($this->formData['cpf'] ?? '')['isValid']) {
+        if (!CpfValidator::isValid($this->formData['cpf'] ?? '')) {
             $this->addError('cpf', 'CPF inválido. Por favor, verifique o número digitado.');
         } else {
             $this->resetErrorBag('cpf');

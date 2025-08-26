@@ -8,9 +8,21 @@ use Illuminate\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 
 class AddressesForm extends Component {
-    public $fields = [];
-    public $formData = [];
-    public $isEditing = false;
+
+    /**
+     * @var array
+     */
+    public array $fields = [];
+
+    /**
+     * @var array
+     */
+    public array $formData = [];
+
+    /**
+     * @var bool
+     */
+    public bool $isEditing = false;
     public $addressId = null;
     public $userId = null;
 
