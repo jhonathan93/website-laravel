@@ -1,17 +1,36 @@
-function isValidSelector(selector) {
-    return /^[a-zA-Z0-9\-_#\.,\s\[\]="']+$/.test(selector);
-}
+import masks from "../libs/masks/masks.js";
+
+/**
+ * @param selector
+ * @returns {boolean}
+ */
+const isValidSelector = (selector) => {
+    try {
+        document.createDocumentFragment().querySelector(selector);
+        return true;
+    } catch {
+        return false;
+    }
+};
+
 export default {
+
     /**
-     * Configura fechamento automático para elementos
-     * @param {string|HTMLElement} target - Seletor CSS ou elemento DOM
-     * @param {number} delay - Tempo em milissegundos (opcional, padrão: 5000)
+     * @param target
+     * @param delay
      */
     autoClose: (target, delay = 3000) => {
         const element = typeof target === 'string' ? document.querySelector(target) : target;
 
         if (!element) {
             console.warn('Elemento não encontrado:', target);
+
+            return;
+        }
+
+        if (!element.classList.contains('auto-closeable')) {
+            console.warn('Tentativa de autoClose em elemento não autorizado:', element);
+
             return;
         }
 
@@ -22,41 +41,83 @@ export default {
     },
 
     /**
-     * Registra um MutationObserver para um elemento específico com um callback personalizado
-     * @param {string} targetSelector - Seletor do elemento a ser observado (ex: "#alert-message")
-     * @param {function} callback - Função a ser executada quando o elemento for detectado
-     * @param {object} observerOptions - Opções do MutationObserver (opcional)
+     * @param inputElement
      */
-    initDynamicObserver: (targetSelector, callback, observerOptions = { childList: true, subtree: true }) => {
-        if (!isValidSelector(targetSelector)) throw new Error('Invalid selector');
+    applyInputMasks: (inputElement) => {
+        if (!(inputElement instanceof HTMLInputElement) || !inputElement.hasAttribute('data-mask')) return;
+
+        const maskType = inputElement.getAttribute('data-mask');
+        const maskFn = masks.maskDispatcher[maskType];
+
+        if (!maskFn) {
+            console.warn(`Tipo de máscara não suportado: ${maskType}`);
+
+            return;
+        }
+
+        if (!inputElement.__app_maskApplied) {
+            inputElement.addEventListener('keyup', maskFn, { passive: true });
+            inputElement.__app_maskApplied = true;
+        }
+
+        if (inputElement.value) maskFn({ target: inputElement });
+    },
+
+    /**
+     * @param targetSelector
+     * @param callback
+     * @param container
+     * @param observerOptions
+     * @returns {Readonly<{observer: MutationObserver, disconnect: (function(): void), reconnect: (function(): void)}>}
+     */
+    initDynamicObserver: (
+        targetSelector,
+        callback,
+        {container = document.querySelector('#dynamic-content-container') || document.body, observerOptions = { childList: true, subtree: true }} = {}) =>
+    {
+        if (!targetSelector || typeof targetSelector !== 'string' || !isValidSelector(targetSelector)) throw new Error('Invalid selector');
 
         if (typeof callback !== 'function') throw new Error('Callback must be a function');
 
+        const processed = new WeakSet();
+
+        const runCallback = (element) => {
+            if (processed.has(element)) return;
+            processed.add(element);
+
+            try {
+                callback(element);
+            } catch (err) {
+                console.error('Callback error:', err);
+            }
+        };
+
         const observer = new MutationObserver((mutations) => {
-            mutations.forEach((mutation) => {
-                mutation.addedNodes.forEach((node) => {
+            for (const mutation of mutations) {
+                for (const node of mutation.addedNodes) {
                     if (node.nodeType === Node.ELEMENT_NODE) {
-                        try {
-                            const element = node.matches(targetSelector) ? node : node.querySelector(targetSelector);
-                            if (element) setTimeout(() => callback(element), 0);
-                        } catch (e) {
-                            console.error('Security error:', e);
+                        const elements = [];
+
+                        if (node.matches?.(targetSelector)) elements.push(node);
+
+                        elements.push(...node.querySelectorAll?.(targetSelector));
+
+                        for (const el of elements) {
+                            queueMicrotask(() => runCallback(el));
                         }
                     }
-                });
-            });
+                }
+            }
         });
 
-        const container = document.querySelector('#dynamic-content-container') || document.body;
         observer.observe(container, observerOptions);
 
-        const existingElement = targetSelector.startsWith('#') ? document.getElementById(targetSelector.slice(1)) : document.querySelector(targetSelector);
+        container.querySelectorAll(targetSelector).forEach((el) => runCallback(el));
 
-        if (existingElement) callback(existingElement);
-
-        return {
+        return Object.freeze({
             observer,
-            disconnect: () => observer.disconnect()
-        };
+            disconnect: () => observer.disconnect(),
+            reconnect: () => observer.observe(container, observerOptions),
+        });
     }
-}
+};

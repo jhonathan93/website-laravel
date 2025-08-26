@@ -21,7 +21,10 @@
                         @endforeach
                     </select>
                 @else
-                    <input type="{{ $config['type'] }}" class="{{ $config['class'] }}" id="{{ $field }}" wire:model="formData.{{ $field }}" placeholder="{{ $config['placeholder'] ?? '' }}" @if($config['required'] ?? false) required @endif>
+                    <input type="{{ $config['type'] }}" class="{{ $config['class'] }}" id="{{ $field }}" wire:model="formData.{{ $field }}" placeholder="{{ $config['placeholder'] ?? '' }}"
+                       @if(isset($config['data-mask'])) data-mask="{{ $config['data-mask'] }}" @endif
+                       @if($config['required'] ?? false) required @endif
+                    />
                 @endif
 
                 {!! $config['after_input'] ?? '' !!}

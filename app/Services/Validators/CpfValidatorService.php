@@ -97,7 +97,7 @@ class CpfValidatorService implements ValidatorServiceInterface {
      */
     private function formatResponse(bool $isValid, string $message): array {
         return [
-            'valid' => $isValid,
+            'isValid' => $isValid,
             'message' => $message,
             'timestamp' => now()->toIso8601String()
         ];

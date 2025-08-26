@@ -54,7 +54,6 @@ class UsersForm extends Component {
                 'type' => 'date',
                 'required' => false,
                 'label' => 'Data de Nascimento',
-                'mask' => '00/00/0000',
                 'placeholder' => '99/99/9999',
                 'class' => 'w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent',
                 'colspan' => '',
@@ -65,9 +64,10 @@ class UsersForm extends Component {
                 'required' => true,
                 'label' => 'CPF',
                 'placeholder' => '000.000.000-00',
-                'mask' => '000.000.000-00',
+                'data-mask' => 'cpf',
                 'class' => 'w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent',
                 'colspan' => '',
+                'wire:blur' => 'validateCpfField',
                 'value' => null
             ],
             'password' => [
@@ -111,6 +111,16 @@ class UsersForm extends Component {
         }
     }
 
+    /**
+     * @return void
+     */
+    public function validateCpfField(): void {
+        if (!app('validator.cpf')->validate($this->formData['cpf'] ?? '')['isValid']) {
+            $this->addError('cpf', 'CPF inválido. Por favor, verifique o número digitado.');
+        } else {
+            $this->resetErrorBag('cpf');
+        }
+    }
 
     /**
      * @return View|Application|Factory
