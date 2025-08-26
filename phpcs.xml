@@ -6,4 +6,12 @@
     <rule ref="WordPress.Security.EscapeOutput">
         <severity>0</severity>
     </rule>
+
+    <rule ref="ESLint.Security.DetectObjectInjection">
+        <severity>0</severity>
+    </rule>
+
+    <rule ref="Generic.Arrays.DisallowShortArraySyntax">
+        <severity>0</severity>
+    </rule>
 </ruleset>
