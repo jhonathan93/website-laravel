@@ -42,7 +42,7 @@ class CepManager {
             fn(CepServiceInterface $p) => $p->getName() === $provider
         );
 
-        if (!$CepProvider) throw new InvalidArgumentException("Provedor de endereço '$provider' não encontrado");
+        if (!$CepProvider) throw new InvalidArgumentException("Provedor de endereço ".e($provider)." não encontrado");
 
         return $CepProvider->cep($codeCep);
     }
@@ -65,6 +65,6 @@ class CepManager {
             }
         }
 
-        throw new RuntimeException("Todos os provedores falharam para o cep: $codeCep");
+        throw new RuntimeException("Todos os provedores falharam para o cep: ".e($codeCep));
     }
 }

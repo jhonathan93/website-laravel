@@ -43,7 +43,7 @@ class GeocodingManager {
             fn(GeocodingServiceInterface $p) => $p->getName() === $provider
         );
 
-        if (!$geocoder) throw new InvalidArgumentException("Provedor de geocodificação '$provider' não encontrado");
+        if (!$geocoder) throw new InvalidArgumentException("Provedor de geocodificação ".e($provider)." não encontrado");
 
         return $geocoder->geocode($address);
     }
@@ -66,6 +66,6 @@ class GeocodingManager {
             }
         }
 
-        throw new RuntimeException("Todos os provedores falharam ao geocodificar o endereço: $address");
+        throw new RuntimeException("Todos os provedores falharam ao geocodificar o endereço: ".e($address));
     }
 }
