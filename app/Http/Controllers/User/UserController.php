@@ -19,7 +19,7 @@ class UserController extends Controller {
         try {
             UserRegistrationService::register($userRegisterRequest->validated());
 
-            return redirect()->intended('/login')->with(['type' => 'success', 'message' => 'Conta criada com sucesso! Faça login para continuar']);
+            return redirect()->intended()->with(['type' => 'success', 'message' => 'Conta criada com sucesso! Faça login para continuar']);
         } catch (RegistrationException $e) {
             logger()->error('Erro no registro - Controller: ' . $e->getMessage());
 

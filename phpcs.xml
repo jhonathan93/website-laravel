@@ -1,17 +1,16 @@
 <?xml version="1.0"?>
-<ruleset name="Laravel Coding Standard">
-    <description>Custom rules for Laravel project</description>
+<ruleset name="MyProject">
+  <description>Coding standard for MyProject</description>
 
-    <!-- Ignorar regras de WordPress -->
-    <rule ref="WordPress.Security.EscapeOutput">
-        <severity>0</severity>
-    </rule>
+  <file>app</file>
+  <file>routes</file>
+  <file>database</file>
 
-    <rule ref="ESLint.Security.DetectObjectInjection">
-        <severity>0</severity>
-    </rule>
 
-    <rule ref="Generic.Arrays.DisallowShortArraySyntax">
-        <severity>0</severity>
-    </rule>
+  <exclude-pattern>vendor/</exclude-pattern>
+  <exclude-pattern>storage/</exclude-pattern>
+
+  <rule ref="PSR12"/>
+
+  <config name="report_format" value="full"/>
 </ruleset>

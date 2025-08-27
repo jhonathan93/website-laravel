@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Components\Notification;
 
 use Livewire\Component;
 use Livewire\Attributes\On;
-use Illuminate\Contracts\View\View;
-use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\View;
 use Illuminate\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Support\Facades\Session;
 
-class AlertMessage extends Component {
+class Notification extends Component {
 
     /**
      * @var ?string

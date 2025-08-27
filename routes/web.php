@@ -22,10 +22,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 });
 
-Route::get('/acesso-negado', function () {
-    return view('blade.pages.auth.unauthorized');
-})->name('unauthorized');
+Route::view('/acesso-negado', 'blade.pages.auth.unauthorized')->name('unauthorized');
 
-Route::fallback(function () {
-    return response()->view('blade.pages.notFound.notFound', [], 404);
-});
+Route::fallback(fn () => response()->view('blade.pages.notFound.notFound', [], 404));

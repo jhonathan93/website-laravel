@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Register;
 
-use Illuminate\Contracts\View\View;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\View;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Foundation\Application;
 
