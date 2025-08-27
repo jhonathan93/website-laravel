@@ -3,8 +3,8 @@
 namespace App\Livewire\Components\Notification;
 
 use Livewire\Component;
+use Illuminate\View\View;
 use Livewire\Attributes\On;
-use Illuminate\Support\Facades\View;
 use Illuminate\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Support\Facades\Session;
@@ -54,6 +54,6 @@ class Notification extends Component {
      * @return View|Application|Factory
      */
     public function render(): View|Application|Factory {
-        return view('livewire.alert-message');
+        return view('livewire.components.notification.notification');
     }
 }
