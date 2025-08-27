@@ -5,6 +5,8 @@ namespace App\Livewire\Components\Forms\Users;
 use Livewire\Component;
 use App\Rules\CpfValidator;
 use Illuminate\Contracts\View\View;
+use App\Views\Forms\UsersFormSchema;
+use App\Helpers\Support\FormRenderer;
 use Illuminate\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 
@@ -25,80 +27,17 @@ class UsersForm extends Component {
      */
     public bool $isEditing = false;
 
-    public $addressId = null;
-    public $userId = null;
+    public ?int $addressId = null;
+    public ?int $userId = null;
 
     /**
-     * @return array[]
+     * Inicializa o formulário
+     *
+     * @param int|null $userId
+     * @param object|null $address
      */
-    protected function getFieldConfig(): array {
-        return [
-            'name' => [
-                'type' => 'text',
-                'required' => true,
-                'label' => 'Nome',
-                'placeholder' => 'Fulano da silva',
-                'class' => 'w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent',
-                'colspan' => 'md:col-span-2',
-                'value' => null
-            ],
-            'email' => [
-                'type' => 'email',
-                'required' => true,
-                'label' => 'Email',
-                'placeholder' => 'fulano.silva@email.com',
-                'class' => 'w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent',
-                'colspan' => '',
-                'value' => null
-            ],
-            'date_of_birth' => [
-                'type' => 'date',
-                'required' => false,
-                'label' => 'Data de Nascimento',
-                'placeholder' => '99/99/9999',
-                'class' => 'w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent',
-                'colspan' => '',
-                'value' => null
-            ],
-            'cpf' => [
-                'type' => 'text',
-                'required' => true,
-                'label' => 'CPF',
-                'placeholder' => '000.000.000-00',
-                'data-mask' => 'cpf',
-                'class' => 'w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent',
-                'colspan' => '',
-                'wire:blur' => 'validateCpfField',
-                'value' => null
-            ],
-            'password' => [
-                'type' => 'password',
-                'required' => true,
-                'label' => 'Senha',
-                'placeholder' => '*********',
-                'class' => 'w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent',
-                'colspan' => '',
-                'value' => null
-            ],
-            'confirm_password' => [
-                'type' => 'password',
-                'required' => true,
-                'label' => 'Confirmar Senha',
-                'placeholder' => '*********',
-                'class' => 'w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent',
-                'colspan' => '',
-                'value' => null
-            ]
-        ];
-    }
-
-    /**
-     * @param $userId
-     * @param $address
-     * @return void
-     */
-    public function mount($userId = null, $address = null): void {
-        $this->fields = $this->getFieldConfig();
+    public function mount(int $userId = null, object $address = null): void {
+        $this->fields = FormRenderer::applyDefaults(UsersFormSchema::fields());
         $this->userId = $userId;
 
         foreach ($this->fields as $field => $config) {
@@ -113,7 +52,7 @@ class UsersForm extends Component {
     }
 
     /**
-     * @return void
+     * Valida o campo CPF isoladamente
      */
     public function validateCpfField(): void {
         if (!CpfValidator::isValid($this->formData['cpf'] ?? '')) {
@@ -124,6 +63,8 @@ class UsersForm extends Component {
     }
 
     /**
+     * Renderiza a view
+     *
      * @return View|Application|Factory
      */
     public function render(): View|Application|Factory {

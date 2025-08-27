@@ -68,6 +68,7 @@ class Address extends Model {
         'zip_code',
         'country',
         'is_primary',
+        'uuid',
     ];
 
     /**

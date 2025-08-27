@@ -2,7 +2,9 @@
 
 @section('content')
     <div class="w-full max-w-5xl mx-auto">
-        <form class="p-6 space-y-6">
+        <form action="{{ route('register-user') }}"  method="POST" class="p-6 space-y-6">
+            @csrf
+
             <livewire:components.forms.users.users-form />
 
             <livewire:components.forms.addresses.addresses-form />

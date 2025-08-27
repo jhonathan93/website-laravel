@@ -5,6 +5,7 @@ namespace App\Livewire;
 use Livewire\Component;
 use Livewire\Attributes\On;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 
@@ -29,12 +30,13 @@ class AlertMessage extends Component {
      * @return void
      */
     public function mount(): void {
-        if (session('message') && session('type')) {
-            $this->dispatch('triggerNotification', message: session('message'), type: session('type'));
+        if (Session::has('message') && Session::has('type')) {
+            $this->dispatch('triggerNotification', message: Session::get('message'), type: Session::get('type'));
 
-            session()->forget(['message', 'type']);
+            Session::forget(['message', 'type']);
         }
     }
+
 
     /**
      * @param string $message
